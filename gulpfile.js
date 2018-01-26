@@ -1,30 +1,62 @@
-var gulp = require('gulp'),
-    uglify = require('gulp-uglify'),
-    concat = require('gulp-concat-util'),
-    watch = require('gulp-watch');
+var gulp = require("gulp");
+var browserify = require("browserify");
+var source = require('vinyl-source-stream');
+var tsify = require("tsify");
+var sass = require("gulp-sass");
+var paths = {
+    pages: ['src/*.html'],
+    libs: [
+        'libs/**/*.*'
+    ],
+    watch: [
+        "./src/*.ts",
+        "./src/**/*.ts",
+        "./src/*.html",
+        "./scss/*.scss"
+    ],
+    assets: [
+        'resources/**/*.*'
+    ]
+};
 
-var kurveSources = [
-    './src/Kurve.js',
-    './src/KurveSound.js',
-];
+gulp.task("index", function () {
+    return gulp.src(paths.pages)
+        .pipe(gulp.dest("dist"));
+});
 
-gulp.task('build', function() {
-    gulp.src(kurveSources)
-        .pipe(uglify({
-            preserveComments: 'some'
+gulp.task("libs", function () {
+    return gulp.src(paths.libs)
+        .pipe(gulp.dest("./dist/libs"));
+});
+
+gulp.task("resources", function () {
+    return gulp.src(paths.assets)
+        .pipe(gulp.dest("./dist/resources"));
+});
+
+gulp.task("watch", function() {
+    gulp.watch(paths.watch, ["default"]);
+});
+
+gulp.task("sass", function(done) {
+    gulp.src("./scss/interface.scss")
+        .pipe(sass({
+            errLogToConsole: true
         }))
-        .pipe(concat('kurve.min.js', {sep: ''}))
-        .pipe(gulp.dest('./resources/js/'));
+        .pipe(gulp.dest("./dist"))
+        .on("end", done);
 });
 
-gulp.task('develop', function() {
-    gulp.src(kurveSources)
-        .pipe(concat('kurve.min.js', {sep: '\n\n'}))
-        .pipe(gulp.dest('./resources/js/'));
-});
-
-gulp.task('watch', function(){
-    watch('src/*', function(){
-        gulp.start('develop')
+gulp.task("default", ["index", "libs", "sass", "resources"], function () {
+    return browserify({
+        basedir: '.',
+        debug: true,
+        entries: ['src/main.ts'],
+        cache: {},
+        packageCache: {}
     })
+        .plugin(tsify)
+        .bundle()
+        .pipe(source('bundle.js'))
+        .pipe(gulp.dest("dist"));
 });
