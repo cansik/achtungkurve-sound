@@ -10,13 +10,18 @@ var Kurve = {
         //play the loop between 0-2m on the transport
         loop.start(0).stop('2m');
 
-        document.querySelector('.playToggle').addEventListener('change', function (e) {
+        var playToggle = document.querySelector('.playToggle');
+
+        playToggle.addEventListener('change', function (e) {
             if (e.target.checked) {
                 Tone.Transport.start('+0.1');
             } else {
                 Tone.Transport.stop();
             }
         });
+
+        // auto play
+        playToggle.click();
     }
 };
 
