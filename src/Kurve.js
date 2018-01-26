@@ -1,27 +1,30 @@
 class Kurve {
     init() {
-        let synth = new Tone.MembraneSynth().toMaster();
+        let sound = new KurveSound();
+        sound.init();
 
-        //create a loop
-        let loop = new Tone.Loop(function (time) {
-            synth.triggerAttackRelease("C1", "8n", time)
-        }, "4n");
-
-        //play the loop between 0-2m on the transport
-        loop.start(0).stop('2m');
-
-        let playToggle = document.querySelector('.playToggle');
-
-        playToggle.addEventListener('change', function (e) {
+        // controls
+        let playMusic = document.querySelector('#playMusic');
+        playMusic.addEventListener('change', function (e) {
             if (e.target.checked) {
-                Tone.Transport.start('+0.1');
+                sound.playTrack();
             } else {
-                Tone.Transport.stop();
+                sound.stopTrack();
             }
         });
 
         // auto play
-        playToggle.click();
+        //playMusic.click();
+
+        // controls
+        let playSFX = document.querySelector('#playEffects');
+        playSFX.addEventListener('pointerdown', function (e) {
+            sound.playSoundEffect("menuSwitch");
+        });
+
+        playSFX.addEventListener('pointerup', function (e) {
+            sound.stopSoundEffect("menuSwitch");
+        });
     }
 }
 
