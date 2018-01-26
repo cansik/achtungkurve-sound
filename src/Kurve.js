@@ -1,16 +1,16 @@
-var Kurve = {
-    init: function () {
-        var synth = new Tone.MembraneSynth().toMaster();
+class Kurve {
+    init() {
+        let synth = new Tone.MembraneSynth().toMaster();
 
         //create a loop
-        var loop = new Tone.Loop(function (time) {
+        let loop = new Tone.Loop(function (time) {
             synth.triggerAttackRelease("C1", "8n", time)
         }, "4n");
 
         //play the loop between 0-2m on the transport
         loop.start(0).stop('2m');
 
-        var playToggle = document.querySelector('.playToggle');
+        let playToggle = document.querySelector('.playToggle');
 
         playToggle.addEventListener('change', function (e) {
             if (e.target.checked) {
@@ -23,6 +23,7 @@ var Kurve = {
         // auto play
         playToggle.click();
     }
-};
+}
 
-document.addEventListener('DOMContentLoaded', Kurve.init.bind(Kurve));
+let kurve = new Kurve();
+document.addEventListener('DOMContentLoaded', kurve.init);
