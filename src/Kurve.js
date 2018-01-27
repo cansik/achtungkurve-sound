@@ -4,12 +4,13 @@ class Kurve {
         sound.init();
 
         // controls
+        let menuSong;
         let playMusic = document.querySelector('#playMusic');
         playMusic.addEventListener('change', function (e) {
             if (e.target.checked) {
-                sound.playTrack();
+                menuSong = sound.playSong("menuSong");
             } else {
-                sound.stopTrack();
+                menuSong.stop();
             }
         });
 
@@ -17,13 +18,14 @@ class Kurve {
         //playMusic.click();
 
         // controls
+        let sfx;
         let playSFX = document.querySelector('#playEffects');
         playSFX.addEventListener('pointerdown', function (e) {
-            sound.playSoundEffect("menuSwitch");
+            sfx = sound.playSoundEffect("menuSwitch");
         });
 
         playSFX.addEventListener('pointerup', function (e) {
-            sound.stopSoundEffect("menuSwitch");
+            sfx.stop();
         });
     }
 }

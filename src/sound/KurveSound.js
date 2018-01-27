@@ -2,38 +2,37 @@ class KurveSound
 {
     init() {
         this.soundEffects = {
-            'menuSwitch': new MenuSwitchEffect()
+            'menuSwitch': MenuSwitchEffect
         };
 
-        // initialise sfx
 
-
-        // test for menu track
-        this.menuTrack = new MenuTrack();
-        this.menuTrack.init();
+        this.songs = {
+            'menuSong': MenuSong
+        };
     }
 
-    playTrack()
+    playSong(name)
     {
-        this.menuTrack.load();
+        let song = new this.songs[name]();
+        song.init();
+        song.play();
+
+        // play track
         Tone.Transport.start('+0.1');
-    }
 
-    stopTrack()
-    {
-        Tone.Transport.stop();
+        return song;
     }
 
     playSoundEffect(name)
     {
-        let sfx = this.soundEffects[name];
+        let sfx = new this.soundEffects[name]();
         sfx.init();
         sfx.play();
+        return sfx;
     }
 
-    stopSoundEffect(name)
+    stopAllSongs()
     {
-        let sfx = this.soundEffects[name];
-        sfx.stop();
+        Tone.Transport.stop();
     }
 }

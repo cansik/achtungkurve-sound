@@ -9,7 +9,7 @@ class MenuSwitchEffect extends AbstractSoundEffect
     play()
     {
         super.play();
-        this.synth.triggerAttack("C4");
+        this.synth.triggerAttack("C3");
     }
 
     stop()
